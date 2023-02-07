@@ -1,7 +1,12 @@
 from django.shortcuts import render
 from . models import Emp, Admin
 from django.contrib import messages
-from admin_views.admin import AdminViews
+from django.contrib.auth.models import User
+from django.contrib import auth
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
+
+
 
 
 
@@ -11,12 +16,18 @@ def index(request):
 def emp(request):
     return render (request,'emp.html')
 
+@login_required
 def admins(request):
-    return render (request,'admin.html') 
+    data=Emp.objects.all()
+    ad=Admin.objects.all()
+    return render (request,'admin.html',{'data':data,'ad':ad}) 
 
 def details(request):
-    data=AdminViews.objects.all()
-    return render (request,'details.html',{'data':data}) 
+    data=Emp.objects.all()
+    ad=Admin.objects.all()
+    return render (request,'details.html',{'data':data,'ad':ad}) 
+
+    
 
 def add_mail(request):
     to=request.POST['to']
@@ -33,6 +44,7 @@ def add_mail(request):
         messages.success(request,'!!!!Successfully Added!!!!')
         return render(request,'emp.html') 
 
+@login_required
 def admin_panel(request):
     t=Admin()
     tid=request.POST['emp_details']
@@ -41,7 +53,48 @@ def admin_panel(request):
     t.save()
     data=Emp.objects.all()
     ad=Admin.objects.all()
-    messages.info(request,'added')
+    messages.info(request,'Response Submitted')
     return render(request,'details.html',{'data':data,'ad':ad})
+
+ 
+
+def register(request):
+    if request.method=='POST':
+        name=request.POST['name']
+        email=request.POST['email']
+        password=request.POST['password']
+        if User.objects.filter(username=name).exists():
+            messages.info(request,"Username already exists")
+            return render(request,'register.html')
+        elif User.objects.filter(email=email).exists():
+            messages.info(request,"Email already exists")
+            return render(request,'register.html')   
+        else:
+            user=User.objects.create_user(username=name,email=email,password=password)
+            user.save()
+            messages.success(request,"Successfully Registered")
+            return render(request,'login.html')
+    else:
+        return render(request,'register.html') 
+
+def alogin(request):
+    if request.method == "POST":
+        name = request.POST['name']
+        password = request.POST['password']
+        user = authenticate(username=name, password=password)
+        if user is not None:
+            login(request, user)
+            messages.success(request, 'Logged in Successfully !!')
+            return render(request,'index.html') 
+        else:
+            messages.error(request," Invalid Username or Password")
+            return render(request, ("login.html"))
+    else:
+        return render(request, ("login.html"))
+
+def lgout(request):
+    auth.logout(request)
+    messages.info(request,'sucessfully logout ')
+    return render(request,'index.html')                       
                    
 

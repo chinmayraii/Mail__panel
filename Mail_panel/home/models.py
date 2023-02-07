@@ -6,7 +6,7 @@ STATUS=(
     )
 
 class Emp(models.Model):
-    to=models.CharField(max_length=50,unique=True)
+    to=models.CharField(max_length=50)
     name=models.CharField(max_length=30)
     subject=models.CharField(max_length=50)
     description=models.TextField()
@@ -19,3 +19,5 @@ class Admin(models.Model):
     response=models.CharField(max_length=30, choices=STATUS)
     def __str__(self) -> str:
         return self.emp_details.name +' '+ self.response
+
+        

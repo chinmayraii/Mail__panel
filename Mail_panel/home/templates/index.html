@@ -24,19 +24,35 @@ crossorigin="anonymous"></script>
   </button>
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav">
-      
-      <li class="nav-item">
-        <a class="nav-link" href="/emp">Employee</a>
-      </li>
+      {% if request.user.is_authenticated %}
       <li class="nav-item">
         <a class="nav-link" href="/admins">Admin Panel</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link disabled" href="/details">All Details</a>
+        <a class="nav-link" href="/lgout">Logout</a>
       </li>
+      {% else %}
+      <li class="nav-item">
+        <a class="nav-link" href="/emp">Employee</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link " href="/details">All Details</a>
+      </li>
+      <li class="nav-item" style="padding-left: 800px;">
+        <a class="nav-link" href="/alogin"><b>Login</b></a>
+      </li>
+      <li class="nav-item pl-3">
+        <a class="nav-link" href="/register"><b>Register</b></a>
+      </li>
+      {% endif %}
     </ul>
   </div>
+  
 </nav>
+
+<div class="container">
+<img src="https://blog.bonus.ly/hubfs/employee-experience-featured-image.png" alt="">
+</div>
 
 </body>
 <script>

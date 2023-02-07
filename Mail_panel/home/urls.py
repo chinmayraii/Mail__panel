@@ -9,4 +9,7 @@ urlpatterns = [
     path('details',views.details),
     path('add_mail',views.add_mail),
     path('admin_panel',views.admin_panel),
+    path('alogin',views.alogin),
+    path('register',views.register),
+    path('lgout',views.lgout),
 ]
